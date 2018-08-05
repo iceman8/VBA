@@ -1,0 +1,20 @@
+Sub Dupa()
+
+zmienna = Sheets("Arkusz1").Range("C4").Value  'zapisanie zawartosci komórki C4 w zmiennej zmienna
+Range("C1") = zmienna 'użycie zmiennej do wypełnienia komórki C1
+
+Range("C1:C4").Select
+Selection.Copy   'polecenie kopiuj
+
+Range("D1:D4").Select
+ActiveSheet.Paste 'wklejanie wyselekcjonowanego tekstu
+ 
+Range("C1:C4").Select 'Wycięcie wyselekcjonowanego tekstu
+Selection.Cut
+
+Range("C1:C4").Select  'usunięcie zawwartosci wybranych komórek
+Selection.ClearContents
+
+
+End Sub
+
