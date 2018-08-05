@@ -1,0 +1,31 @@
+
+Sub Dupa()
+
+'ActiveWorkbook.SaveAs Filename:="C:\Users\rafal\Desktop\VBAa\dupa.xlsx", FileFormat:=xlOpenXMLWorkbook, CreateBaackup = False
+'ActiveWorkbook.SaveAs Filename:="C:\Users\rafal\Desktop\VBAa\Zeszyt1.xlsm", FileFormat:=xlOpenXMLWorkbookMacroEnabled, CreateBackup:=False
+'zapisywanie pliku z podaniem ścieżki i formatu
+
+'MsgBox komunikat, vbYesNoCancel, "Tytuł okienka", odniesienie do pliku pomocy, wartosc numeryczna przy pliku
+Dim Odpowiedz As String
+Dim komunikat As String
+Dim pytania As String
+Dim Tytul As String
+komunikat = "Treść komunikatu"
+pytania = vbQuestion + vbYesNoCancel + vbDefaultButton2
+Tytul = "Tytuł"
+
+Odpowiedz = MsgBox(komunikat, pytania, Tytul)
+
+If Odpowiedz = vbYes Then
+MsgBox "Yes"
+ElseIf Odpowiedz = vbNo Then
+MsgBox "No"
+ElseIf Odpowiedz = vbCancel Then
+MsgBox "Anulowano"
+End If
+
+End Sub
+
+'Private Sub Workbook_Open()
+'MsgBox "Wyświetlany przy otwarciu"
+'End Sub
