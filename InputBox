@@ -1,0 +1,48 @@
+Sub Macro()
+    
+
+'Range("A1") = InputBox("Uzupełnij komórke") 'input komórki
+'Cells(2, 1) = InputBox("Komórka A2 wpisz coś") 'inna opcja wypelnienia komórki danymi
+
+'Function InputBox (Prompt (tekst w oknie), Title (tytuł okna), Default(wartosc defaultowa),
+'Left (pozycja okna w pixelach od lewej strony), Top(pozycja w pixelach od góry), Helpfile (odniesienie do pliku pomocy),
+'HelpContextId (odnisienie numeryczne do okreglonego w poprzednikm argumencie pliku pomocy
+
+'Dim name As String
+'name = InputBox("Wprowadz swoje imie")
+'MsgBox ("Witaj" & name & vbCrLf & " Miłego dnia !") znaki łączym & lub +
+
+'vbCrLf - znaczek entera w okienkacha
+
+
+'Program obliczajacy wiek po wproadzeniu i przypisaniu zmiennej wprodzadzonej
+'Dim Data_Ur As Integer
+'Data_Ur = InputBox("Podaj rok urodzenia", "Your Data", 1990, 0, 0)
+'MsgBox ("Twoj wiek to" & Year(Date) - Data_Ur & vbCrLf & "dzieki")
+
+
+Dim imie As String
+Dim nazwisko As String
+Dim wzrost As Integer
+Dim wiek As Integer
+
+Range("A1") = InputBox("Podaj imie")
+Range("A2") = InputBox("Podaj nazwisko")
+Range("A3") = InputBox("Podaj wzrost")
+Range("A4") = InputBox("Podaj wiek")
+
+imie = Range("A1").Value
+nazwisko = Range("A2").Value
+wzrost = Range("A3").Value
+wiek = Range("A4").Value
+
+Range("B1") = imie
+Range("B2") = nazwisko
+Range("B3") = wzrost
+Range("B4") = wiek
+MsgBox (imie & vbCrLf & nazwisko & vbCrLf & wzrost & vbCrLf & wiek)
+
+
+End Sub
+
+
