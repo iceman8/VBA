@@ -1,0 +1,27 @@
+Sub zmienne()
+
+'nadawanie typu zmiennym
+Dim intVar As Integer
+Dim datVar As Date
+Dim strVar As String
+
+intVar = 10
+datVar = "2018/08/21"
+strVar = "napis"
+
+'MsgBox (intVar & " " & datVar & " " & strVar)
+
+MsgBox (Month(datVar))
+'Static zmienna stosowana dla licznika za każdyn razem uruchomienie inkrementuje dana
+'Static moze sluzyc do zliczania ilosci operacji wykonanych
+Static a As Integer
+    a = a + 1
+    Cells(1, 1) = a
+    
+'Private działa w obrebie modulu i procedur w ktoryum zostala zadeklarowana
+Private K As Integer
+
+End Sub
+
+
+
