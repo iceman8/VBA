@@ -19,7 +19,21 @@ Static a As Integer
     Cells(1, 1) = a
     
 'Private działa w obrebie modulu i procedur w ktoryum zostala zadeklarowana
-Private K As Integer
+Sub Program()
+
+Dim promien As Integer
+Dim Pi As Double
+
+Dim promien2 As Integer
+promien = Range("B6").Value
+Pi = Cells(7, 2).Value
+
+'MsgBox (promien * Pi)
+promien2 = InputBox("Podaj promien kola")
+MsgBox ("obwod dla promienia " & promien2 & " wynosi " & 2 * Pi * promien2)
+
+
+End Sub
 
 End Sub
 
