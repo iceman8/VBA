@@ -1,0 +1,28 @@
+
+
+Sub Zapis()
+    
+Range("A1").Value = 500
+Application.DisplayAlerts = False
+ActiveWorkbook.SaveAs Filename:="C:\Users\Rafal.morawski\Desktop\c++\kupa.xlsx", FileFormat:=xlOpenXMLWorkbook, CreateBackup:=False
+
+End Sub
+
+Sub SaveWitoutMacros_Click()
+    
+    x = ThisWorkbook.Path & "\" & ThisWorkbook.Name & "_" & Format(Date + Time(), "yyyyMMdd_hh-mm") & ".xlsx"
+    
+    Application.DisplayAlerts = False
+    
+    ActiveWorkbook.SaveAs x, FileFormat:=xlOpenXMLWorkbook
+        
+    MsgBox ("Plik zapisany jako " & x)
+    
+    ActiveWorkbook.Close False
+    
+   ' Kill x     (moze niepotrzebne, zdawalo mi sie, ze czasem proces zostaje czynny...)
+            
+    Application.DisplayAlerts = True
+    
+        
+End Sub
