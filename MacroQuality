@@ -22,4 +22,7 @@ Sub Macro5()
     False).Activate
 
   ActiveCell.Offset(0, 1).Select
+  
+ 
+    Selection.ShowDetail = True
 End Sub
