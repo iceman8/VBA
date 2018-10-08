@@ -1,0 +1,13 @@
+Sub Macro13()
+
+'Dim k As Integer
+'Dim liczba_wierszy As Integer
+Dim sample As Integer
+Dim sample2 As Double
+k = Range("A1").CurrentRegion.Rows.Count
+sample = k - 1
+sample2 = sample / 10
+zaokragl = Round(sample2, 0)
+MsgBox zaokragl
+
+End Sub
