@@ -1,0 +1,20 @@
+Sub Macro5()
+'
+' Macro5 Macro
+'
+   Range(Selection, Selection.End(xlToRight)).Select
+    Range(Selection, Selection.End(xlDown)).Select
+    ActiveWorkbook.PivotCaches.Create(SourceType:=xlDatabase, SourceData:= _
+        "ORIGIN!R1C1:R3135C14", Version:=6).CreatePivotTable TableDestination:="", TableName:="PivotTable7", DefaultVersion:=6
+
+    ActiveSheet.PivotTables("PivotTable7").AddDataField ActiveSheet.PivotTables( _
+        "PivotTable7").PivotFields("Reference"), "Count of Reference", xlCount
+    With ActiveSheet.PivotTables("PivotTable7").PivotFields("Resolved by")
+        .Orientation = xlRowField
+        .Position = 1
+    End With
+    
+    
+    x = InputBox("wpisz osobe")
+
+End Sub
