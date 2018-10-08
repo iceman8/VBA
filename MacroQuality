@@ -21,4 +21,5 @@ Sub Macro5()
     SearchOrder:=xlByRows, SearchDirection:=xlNext, MatchCase:= _
     False).Activate
 
+  ActiveCell.Offset(0, 1).Select
 End Sub
