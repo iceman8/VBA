@@ -25,4 +25,11 @@ Sub Macro5()
   
  
     Selection.ShowDetail = True
+    
+    'wybieranie sampla 
+        k = Range("A1").CurrentRegion.Rows.Count
+    sample = k - 1
+    sample2 = sample / 10
+    zaokragl = Round(sample2, 0)
+    MsgBox zaokragl
 End Sub
