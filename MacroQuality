@@ -1,7 +1,5 @@
-Sub Macro5()
-'
-' Macro5 Macro
-'
+Sub qwerty()
+
    Range(Selection, Selection.End(xlToRight)).Select
     Range(Selection, Selection.End(xlDown)).Select
     ActiveWorkbook.PivotCaches.Create(SourceType:=xlDatabase, SourceData:= _
@@ -26,10 +24,44 @@ Sub Macro5()
  
     Selection.ShowDetail = True
     
-    'wybieranie sampla 
+    'wybieranie sampla
         k = Range("A1").CurrentRegion.Rows.Count
     sample = k - 1
     sample2 = sample / 10
     zaokragl = Round(sample2, 0)
     MsgBox zaokragl
+    
+       Dim i As Long, LastRowOrig As Long, LastRowDest As Long
+     Set aws = ActiveSheet 'aws is current active sheet
+    Sheets.Add 'add a new sheet
+    ActiveSheet.Name = "Labels" 'name it "labels"
+    aws.Activate 'reactivate initial active sheet
+    'uses the active sheet and Z range to 120
+    Set wsDestination = ActiveWorkbook.Worksheets("Labels") 'dotad dziala
+    
+    LastRowOrig = aws.Cells(aws.Rows.Count, "A").End(xlUp).Row
+   'MsgBox "dziala"
+'   Dim wsOriginal As Worksheet: Set wsOriginal = ThisWorkbook.Worksheets("aws")
+    MsgBox "dziala"
+    
+    For i = 1 To zaokragl 'loop 18 times
+   RandNumber = Int((LastRowOrig - 2 + 1) * Rnd + 2)
+    'generate a random number between 2 and 180 (Last Row)
+   LastRowDest = wsDestination.Cells(wsDestination.Rows.Count, "A").End(xlUp).Row + 1
+    'get the last row with data on Destination sheet and offset by one (i.e. next free row)
+   aws.Rows(RandNumber).Copy 'copy the row
+   wsDestination.Rows(LastRowDest).PasteSpecial xlPasteAll 'paste the row
+Next i
+
+ Cells.Select
+Selection.ClearContents
+Sheets("Labels").Select
+Range(Cells(2, 1), Cells(zaokragl + 1, 1)).Select
+Selection.Cut
+aws.Activate
+ActiveSheet.Paste
+   
+
+
+
 End Sub
