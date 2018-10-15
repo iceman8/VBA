@@ -1,38 +1,74 @@
-Sub qwerty()
 
-   Range(Selection, Selection.End(xlToRight)).Select
-    Range(Selection, Selection.End(xlDown)).Select
-    ActiveWorkbook.PivotCaches.Create(SourceType:=xlDatabase, SourceData:= _
-        "ORIGIN!R1C1:R3135C14", Version:=6).CreatePivotTable TableDestination:="", TableName:="PivotTable7", DefaultVersion:=6
+Sub Macro1()
 
-    ActiveSheet.PivotTables("PivotTable7").AddDataField ActiveSheet.PivotTables( _
-        "PivotTable7").PivotFields("Reference"), "Count of Reference", xlCount
-    With ActiveSheet.PivotTables("PivotTable7").PivotFields("Resolved by")
+Dim PSheet As Worksheet
+Dim DSheet As Worksheet
+Dim PCache As PivotCache
+Dim PTable As PivotTable
+Dim PRange As Range
+Dim LastRow As Long
+Dim LastCol As Long
+Dim zakres As String
+
+On Error Resume Next
+Application.DisplayAlerts = False
+Worksheets("PivotTable").Delete
+Sheets.Add Before:=ActiveSheet
+ActiveSheet.Name = "PivotTable"
+Application.DisplayAlerts = True
+Set PSheet = Worksheets("PivotTable")
+Set DSheet = Worksheets("ORIGIN") '
+
+DSheet.Activate
+'PSheet.Activate
+
+Range("A1").Select
+zakres = ActiveCell.CurrentRegion.Address
+
+'LastCol = DSheet.Range(Selection, Selection.End(xlDown))
+'LastRow = DSheet.Range(Selection, Selection.End(xlToRight))
+'MsgBox LastCol
+
+'Set PRange = DSheet.Cells(1, 1).Resize(LastRow, LastCol)
+
+Set PCache = ActiveWorkbook.PivotCaches.Create _
+(SourceType:=xlDatabase, SourceData:=zakres). _
+CreatePivotTable(TableDestination:="", _
+TableName:="SalesPivotTable")
+
+Set PTable = PCache.CreatePivotTable _
+(TableDestination:=PSheet.Cells(1, 1), TableName:="SalesPivotTable")
+
+  ' With ActiveSheet.PivotTables("SalesPivotTable").PivotFields("Resolved by")
+      '  .Orientation = xlRowField
+      '  .Position = 1
+  '  End With
+    
+    ActiveSheet.PivotTables("SalesPivotTable").AddDataField ActiveSheet.PivotTables( _
+        "SalesPivotTable").PivotFields("Reference"), "Count of Reference", xlCount
+    With ActiveSheet.PivotTables("SalesPivotTable").PivotFields("Resolved by")
         .Orientation = xlRowField
         .Position = 1
     End With
-    
-    
- 
-    Cells.Find(What:=InputBox("Please enter your search criteria", "Search"), _
+
+Cells.Find(What:=InputBox("Please enter your search criteria", "Search"), _
     After:=ActiveCell, LookIn:=xlFormulas, LookAt:=xlPart, _
     SearchOrder:=xlByRows, SearchDirection:=xlNext, MatchCase:= _
     False).Activate
 
-  ActiveCell.Offset(0, 1).Select
+    ActiveCell.Offset(0, 1).Select
   
- 
     Selection.ShowDetail = True
     
     'wybieranie sampla
-        k = Range("A1").CurrentRegion.Rows.Count
+    k = Range("A1").CurrentRegion.Rows.Count
     sample = k - 1
     sample2 = sample / 10
     zaokragl = Round(sample2, 0)
-    MsgBox zaokragl
+   'MsgBox zaokragl
     
-       Dim i As Long, LastRowOrig As Long, LastRowDest As Long
-     Set aws = ActiveSheet 'aws is current active sheet
+    Dim i As Long, LastRowOrig As Long, LastRowDest As Long
+    Set aws = ActiveSheet 'aws is current active sheet
     Sheets.Add 'add a new sheet
     ActiveSheet.Name = "Labels" 'name it "labels"
     aws.Activate 'reactivate initial active sheet
@@ -42,8 +78,7 @@ Sub qwerty()
     LastRowOrig = aws.Cells(aws.Rows.Count, "A").End(xlUp).Row
    'MsgBox "dziala"
 '   Dim wsOriginal As Worksheet: Set wsOriginal = ThisWorkbook.Worksheets("aws")
-    MsgBox "dziala"
-    
+ 
     For i = 1 To zaokragl 'loop 18 times
    RandNumber = Int((LastRowOrig - 2 + 1) * Rnd + 2)
     'generate a random number between 2 and 180 (Last Row)
@@ -51,17 +86,22 @@ Sub qwerty()
     'get the last row with data on Destination sheet and offset by one (i.e. next free row)
    aws.Rows(RandNumber).Copy 'copy the row
    wsDestination.Rows(LastRowDest).PasteSpecial xlPasteAll 'paste the row
+   
 Next i
 
- Cells.Select
+Cells.Select
 Selection.ClearContents
 Sheets("Labels").Select
 Range(Cells(2, 1), Cells(zaokragl + 1, 1)).Select
 Selection.Cut
 aws.Activate
 ActiveSheet.Paste
-   
+Application.DisplayAlerts = False
 
-
-
+Worksheets("Labels").Delete
+Worksheets("PivotTable").Delete
+Worksheets("ORIGIN").Delete
+PCache.Delete
+Application.DisplayAlerts = True
+    
 End Sub
