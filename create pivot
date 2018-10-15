@@ -1,0 +1,49 @@
+Dim PSheet As Worksheet
+Dim DSheet As Worksheet
+Dim PCache As PivotCache
+Dim PTable As PivotTable
+Dim PRange As Range
+Dim LastRow As Long
+Dim LastCol As Long
+Dim zakres As String
+
+On Error Resume Next
+Application.DisplayAlerts = False
+Worksheets("PivotTable").Delete
+Sheets.Add Before:=ActiveSheet
+ActiveSheet.Name = "PivotTable"
+Application.DisplayAlerts = True
+Set PSheet = Worksheets("PivotTable")
+Set DSheet = Worksheets("ORIGIN") '
+
+DSheet.Activate
+'PSheet.Activate
+
+Range("A1").Select
+zakres = ActiveCell.CurrentRegion.Address
+
+'LastCol = DSheet.Range(Selection, Selection.End(xlDown))
+'LastRow = DSheet.Range(Selection, Selection.End(xlToRight))
+'MsgBox LastCol
+
+'Set PRange = DSheet.Cells(1, 1).Resize(LastRow, LastCol)
+
+Set PCache = ActiveWorkbook.PivotCaches.Create _
+(SourceType:=xlDatabase, SourceData:=zakres). _
+CreatePivotTable(TableDestination:="", _
+TableName:="SalesPivotTable")
+
+Set PTable = PCache.CreatePivotTable _
+(TableDestination:=PSheet.Cells(1, 1), TableName:="SalesPivotTable")
+
+ ' With ActiveSheet.PivotTables("SalesPivotTable").PivotFields("Resolved by")
+      '  .Orientation = xlRowField
+      '  .Position = 1
+  '  End With
+    
+    ActiveSheet.PivotTables("SalesPivotTable").AddDataField ActiveSheet.PivotTables( _
+        "SalesPivotTable").PivotFields("Reference"), "Count of Reference", xlCount
+    With ActiveSheet.PivotTables("SalesPivotTable").PivotFields("Resolved by")
+        .Orientation = xlRowField
+        .Position = 1
+    End With
