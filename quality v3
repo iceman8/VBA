@@ -1,0 +1,111 @@
+Sub nowy2()
+Dim napis As String
+
+Dim i As Long, LastRowOrig As Long, LastRowDest As Long
+Dim Trouve As Range, PlageDeRecherche As Range
+ActiveSheet.name = "piwocik"
+
+
+Set PIWOT = ActiveSheet
+
+Dim MyArray(1 To 15) As String
+
+MyArray(1) = "Aleksandra Zawacka"
+MyArray(2) = "Ewelina Opalko"
+MyArray(3) = "Jakub Cymer"
+MyArray(4) = "Jakub Bellwon"
+MyArray(5) = "Katarzyna Kobrzynska"
+MyArray(6) = "Krzysztof Jaworski"
+MyArray(7) = "Malgorzata Duchowska"
+MyArray(8) = "Paula Miklas"
+MyArray(9) = "Paulina Gruchala"
+MyArray(10) = "Piotr Jedrzejczak"
+MyArray(11) = "Rafal Morawski"
+MyArray(12) = "Sara Ostrowska"
+MyArray(13) = "Weronika Lewkowicz"
+MyArray(14) = "Wioleta Grodzicka"
+MyArray(15) = "Beata Michalak"
+
+For p = 1 To UBound(MyArray)
+    napis = MyArray(p)
+    On Error GoTo Error_handler:
+    Cells.Find(what:=napis, _
+        After:=ActiveCell, LookIn:=xlFormulas, LookAt:=xlPart, _
+        SearchOrder:=xlByRows, SearchDirection:=xlNext, MatchCase:= _
+        False).Activate
+    
+    ActiveCell.Offset(0, 1).Select
+    Selection.ShowDetail = True
+    
+   
+    ActiveSheet.name = "sample"
+    
+    k = Range("A1").CurrentRegion.Rows.Count
+    sample = k - 1
+
+    If sample > 5 Then
+    sample2 = sample / 10
+    zaokragl = Round(sample2, 0)
+   
+    
+    Set aws = ActiveSheet 'aws is current active sheet
+    Sheets.Add 'add a new sheet
+    ActiveSheet.name = "10% "   'name it "labels"
+    aws.Activate 'reactivate initial active sheet
+    'uses the active sheet and Z range to 120
+    Set wsDestination = ActiveWorkbook.Worksheets("10% ") '
+    
+    LastRowOrig = aws.Cells(aws.Rows.Count, "A").End(xlUp).Row
+   'MsgBox "dziala"
+'   Dim wsOriginal As Worksheet: Set wsOriginal = ThisWorkbook.Worksheets("aws")
+ 
+    For i = 1 To zaokragl 'loop 18 times
+   RandNumber = Int((LastRowOrig - 2 + 1) * Rnd + 2)
+    'generate a random number between 2 and 180 (Last Row)
+   LastRowDest = wsDestination.Cells(wsDestination.Rows.Count, "A").End(xlUp).Row + 1
+    'get the last row with data on Destination sheet and offset by one (i.e. next free row)
+   aws.Rows(RandNumber).Copy 'copy the row
+   wsDestination.Rows(LastRowDest).PasteSpecial xlPasteAll 'paste the row
+
+   
+Next i
+       wsDestination.name = "10% " & napis
+         Application.DisplayAlerts = False
+               aws.Delete
+            Application.DisplayAlerts = True
+
+    PIWOT.Activate
+    
+    Else
+
+    Set aws = ActiveSheet 'aws is current active sheet
+    Sheets.Add 'add a new sheet
+    ActiveSheet.name = "10% "   'name it "labels"
+    aws.Activate 'reactivate initial active sheet
+    'uses the active sheet and Z range to 120
+    Set wsDestination = ActiveWorkbook.Worksheets("10% ") '
+    
+    LastRowOrig = aws.Cells(aws.Rows.Count, "A").End(xlUp).Row
+   'MsgBox "dziala"
+'   Dim wsOriginal As Worksheet: Set wsOriginal = ThisWorkbook.Worksheets("aws")
+ 
+
+   RandNumber = Int((LastRowOrig - 2 + 1) * Rnd + 2)
+    'generate a random number between 2 and 180 (Last Row)
+   LastRowDest = wsDestination.Cells(wsDestination.Rows.Count, "A").End(xlUp).Row + 1
+    'get the last row with data on Destination sheet and offset by one (i.e. next free row)
+   aws.Rows(RandNumber).Copy 'copy the row
+   wsDestination.Rows(LastRowDest).PasteSpecial xlPasteAll 'paste the row
+
+          wsDestination.name = "10% " & napis
+         Application.DisplayAlerts = False
+               aws.Delete
+            Application.DisplayAlerts = True
+
+    PIWOT.Activate
+End If
+Error_handler:
+
+Next p
+    
+End Sub
