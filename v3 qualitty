@@ -1,0 +1,189 @@
+Sub wyjscie()
+
+Dim Imie As String
+Dim PSheet As Worksheet
+Dim DSheet As Worksheet
+Dim PCache As PivotCache
+Dim PTable As PivotTable
+Dim PRange As Range
+Dim LastRow As Long
+Dim LastCol As Long
+Dim zakres As String
+
+On Error Resume Next
+Application.DisplayAlerts = False
+Worksheets("PivotTable").Delete
+'Sheets.Add Before:=ActiveSheet
+'ActiveSheet.name = "PivotTable"
+Application.DisplayAlerts = True
+Set PSheet = Worksheets("PivotTable")
+Set DSheet = Worksheets("ORIGIN") '
+
+DSheet.Activate
+'PSheet.Activate
+
+Range("A1").Select
+zakres = ActiveCell.CurrentRegion.Address
+
+'LastCol = DSheet.Range(Selection, Selection.End(xlDown))
+'LastRow = DSheet.Range(Selection, Selection.End(xlToRight))
+'MsgBox LastCol
+
+'Set PRange = DSheet.Cells(1, 1).Resize(LastRow, LastCol)
+
+Set PCache = ActiveWorkbook.PivotCaches.Create _
+(SourceType:=xlDatabase, SourceData:=zakres). _
+CreatePivotTable(TableDestination:="", _
+TableName:="SalesPivotTable")
+
+Set PTable = PCache.CreatePivotTable _
+(TableDestination:=PSheet.Cells(1, 1), TableName:="SalesPivotTable")
+
+  ' With ActiveSheet.PivotTables("SalesPivotTable").PivotFields("Resolved by")
+      '  .Orientation = xlRowField
+      '  .Position = 1
+  '  End With
+    
+ActiveSheet.PivotTables("SalesPivotTable").AddDataField ActiveSheet.PivotTables( _
+        "SalesPivotTable").PivotFields("Reference"), "Count of Reference", xlCount
+    With ActiveSheet.PivotTables("SalesPivotTable").PivotFields("Resolved by")
+        .Orientation = xlRowField
+        .Position = 1
+    End With
+
+Dim napis As String
+
+Dim i As Long, LastRowOrig As Long, LastRowDest As Long
+Dim Trouve As Range, PlageDeRecherche As Range
+ActiveSheet.name = "piwocik"
+
+
+Set PIWOT = ActiveSheet
+
+Dim MyArray(1 To 15) As String
+
+MyArray(1) = "x xx"
+MyArray(2) = "x xx"
+MyArray(3) = "pp pp"
+MyArray(4) = "ee ee"
+MyArray(5) = "qq qq"
+MyArray(6) = "rr rr"
+MyArray(7) = "yy yy"
+MyArray(8) = "ii ii"
+MyArray(9) = "pp oo"
+MyArray(10) = "gg gg"
+MyArray(11) = "zz zz"
+MyArray(12) = "cc c"
+MyArray(13) = "nn nn"
+MyArray(14) = "mm mm"
+MyArray(15) = "hh h"
+
+Dim cl As Range
+For p = 1 To UBound(MyArray)
+
+    napis = MyArray(p)
+     
+     With Sheets("piwocik").Range("A:A")
+            Set Rng = .Find(What:=napis, _
+                            After:=.Cells(.Cells.Count), _
+                            LookIn:=xlValues, _
+                            LookAt:=xlWhole, _
+                            SearchOrder:=xlByRows, _
+                            SearchDirection:=xlNext, _
+                            MatchCase:=False)
+                If Not Rng Is Nothing Then
+                Application.Goto Rng, True
+            Else
+                GoTo message
+            End If
+            
+     
+    ActiveCell.Offset(0, 1).Select
+    Selection.ShowDetail = True
+    
+   
+    ActiveSheet.name = "sample"
+    
+    k = Range("A1").CurrentRegion.Rows.Count
+    sample = k - 1
+
+    If sample > 5 Then
+    sample2 = sample / 10
+    zaokragl = Round(sample2, 0)
+   wybor = zaokragl
+    
+    Set aws = ActiveSheet 'aws is current active sheet
+    Sheets.Add 'add a new sheet
+    ActiveSheet.name = "10% "   'name it "labels"
+    aws.Activate 'reactivate initial active sheet
+    Set wsDestination = ActiveWorkbook.Worksheets("10% ") '
+    LastRowOrig = aws.Cells(aws.Rows.Count, "A").End(xlUp).Row
+   'MsgBox "dziala"
+   'Dim wsOriginal As Worksheet: Set wsOriginal = ThisWorkbook.Worksheets("aws")
+ 
+    For i = 1 To zaokragl 'loop 18 times
+   RandNumber = Int((LastRowOrig - 2 + 1) * Rnd + 2)
+    'generate a random number between 2 and 180 (Last Row)
+   LastRowDest = wsDestination.Cells(wsDestination.Rows.Count, "A").End(xlUp).Row + 1
+    'get the last row with data on Destination sheet and offset by one (i.e. next free row)
+   'aws.Rows(RandNumber).Copy 'copy the row
+   'wsDestination.Rows(LastRowDest).PasteSpecial xlPasteAll 'paste the row
+   MsgBox LastRowOrig
+  
+      aws.Rows(RandNumber).Copy 'copy the row
+      aws.Rows(RandNumber).Select
+   wsDestination.Rows(LastRowDest).PasteSpecial xlPasteAll
+   
+   Sheets("sample").Select
+   Selection.Delete Shift:=xlUp
+ LastRowOrig = LastRowOrig - 1
+   
+   
+Next i
+       wsDestination.name = "10% " & napis
+         Application.DisplayAlerts = False
+               aws.Delete
+            Application.DisplayAlerts = True
+
+    PIWOT.Activate
+    
+    Else
+
+    Set aws = ActiveSheet 'aws is current active sheet
+    Sheets.Add 'add a new sheet
+    ActiveSheet.name = "10% "   'name it "labels"
+    aws.Activate 'reactivate initial active sheet
+    'uses the active sheet and Z range to 120
+    Set wsDestination = ActiveWorkbook.Worksheets("10% ") '
+    
+    LastRowOrig = aws.Cells(aws.Rows.Count, "A").End(xlUp).Row
+   'MsgBox "dziala"
+'   Dim wsOriginal As Worksheet: Set wsOriginal = ThisWorkbook.Worksheets("aws")
+ 
+
+   RandNumber = Int((LastRowOrig - 2 + 1) * Rnd + 2)
+    'generate a random number between 2 and 180 (Last Row)
+   LastRowDest = wsDestination.Cells(wsDestination.Rows.Count, "A").End(xlUp).Row + 1
+    'get the last row with data on Destination sheet and offset by one (i.e. next free row)
+   'aws.Rows(RandNumber).Copy 'copy the row
+   
+aws.Rows(RandNumber).Select
+    Selection.Cut
+   'wsDestination.Paste
+   wsDestination.Rows(LastRowDest).PasteSpecial xlPasteAll 'paste the row
+   Sheets("sample").Select
+   Selection.Delete Shift:=xlUp
+
+          wsDestination.name = "10% " & napis
+         Application.DisplayAlerts = False
+               aws.Delete
+            Application.DisplayAlerts = True
+    PIWOT.Activate
+End If
+End With
+
+message:
+    MsgBox napis
+
+Next p
+End Sub
