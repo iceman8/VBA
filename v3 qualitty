@@ -1,6 +1,4 @@
-Sub wyjscie()
-
-Dim Imie As String
+Sub czlowiek()
 Dim PSheet As Worksheet
 Dim DSheet As Worksheet
 Dim PCache As PivotCache
@@ -12,15 +10,50 @@ Dim zakres As String
 
 On Error Resume Next
 Application.DisplayAlerts = False
-Worksheets("PivotTable").Delete
+'Worksheets("PivotTable").Delete
 'Sheets.Add Before:=ActiveSheet
 'ActiveSheet.name = "PivotTable"
 Application.DisplayAlerts = True
-Set PSheet = Worksheets("PivotTable")
+'Set PSheet = Worksheets("PivotTable")
 Set DSheet = Worksheets("ORIGIN") '
 
 DSheet.Activate
-'PSheet.Activate
+
+'filtering
+    Cells.Find(What:="Comments and Work notes", After:=ActiveCell, LookIn:= _
+        xlFormulas, LookAt:=xlPart, SearchOrder:=xlByRows, SearchDirection:= _
+        xlNext, MatchCase:=False, SearchFormat:=False).Activate
+  
+    Col = Split(ActiveCell(1).Address(1, 0), "$")(0)
+    t = Col & 2
+ 
+    ActiveCell.EntireColumn.Offset(0, 1).Insert
+    ActiveCell.Offset(1, 1).Select
+
+    ActiveCell.Formula = "=MID(" & t & ",SEARCH(" & Chr(34) & "#" & Chr(34) & "," & t & ")+1,SEARCH(" & Chr(34) & "#" & Chr(34) & "," & t & ",SEARCH(" & Chr(34) & "#" & Chr(34) & "," & t & ")+1)-SEARCH(" & Chr(34) & "#" & Chr(34) & "," & t & ")-1)"
+
+    ActiveCell.Select
+   Col2 = Split(ActiveCell(1).Address(1, 0), "$")(0)
+   N = Col2 & 1
+   Z = Col2 & 2
+   l = Col & 1
+    Range(N).Value = "Column1"
+   LastRow = Range(Z).CurrentRegion.Rows.Count
+   Range(Z, Col2 & LastRow).FillDown
+
+    FilterRow = Rows("1:1").Find(What:="Column1", LookAt:=xlWhole).Column
+    DSheet.UsedRange.AutoFilter Field:=FilterRow, Criteria1:="#VALUE!"
+   ' ActiveSheet.ListObjects("Table10").Range.AutoFilter Field:=11, Criteria1:= _
+      '  "#VALUE!"
+'end filtering
+    Range("A1").Select
+    Range(Selection, Selection.End(xlToRight)).Select
+    Range(Selection, Selection.End(xlDown)).Select
+    Selection.Copy
+    Sheets.Add 'add a new sheet
+    ActiveSheet.name = "no uploads "   'name it "labels"
+    Set BezUpload = ActiveWorkbook.Worksheets("no uploads") '
+    ActiveSheet.Paste
 
 Range("A1").Select
 zakres = ActiveCell.CurrentRegion.Address
@@ -35,6 +68,7 @@ Set PCache = ActiveWorkbook.PivotCaches.Create _
 (SourceType:=xlDatabase, SourceData:=zakres). _
 CreatePivotTable(TableDestination:="", _
 TableName:="SalesPivotTable")
+
 
 Set PTable = PCache.CreatePivotTable _
 (TableDestination:=PSheet.Cells(1, 1), TableName:="SalesPivotTable")
@@ -84,15 +118,15 @@ For p = 1 To UBound(MyArray)
     napis = MyArray(p)
      
      With Sheets("piwocik").Range("A:A")
-            Set Rng = .Find(What:=napis, _
+            Set rng = .Find(What:=napis, _
                             After:=.Cells(.Cells.Count), _
                             LookIn:=xlValues, _
                             LookAt:=xlWhole, _
                             SearchOrder:=xlByRows, _
                             SearchDirection:=xlNext, _
                             MatchCase:=False)
-                If Not Rng Is Nothing Then
-                Application.Goto Rng, True
+                If Not rng Is Nothing Then
+                Application.Goto rng, True
             Else
                 GoTo message
             End If
@@ -103,7 +137,8 @@ For p = 1 To UBound(MyArray)
     
    
     ActiveSheet.name = "sample"
-    
+    Set aws = ActiveSheet 'aws is current active sheet
+
     k = Range("A1").CurrentRegion.Rows.Count
     sample = k - 1
 
@@ -112,7 +147,7 @@ For p = 1 To UBound(MyArray)
     zaokragl = Round(sample2, 0)
    wybor = zaokragl
     
-    Set aws = ActiveSheet 'aws is current active sheet
+   ' Set aws = ActiveSheet 'aws is current active sheet
     Sheets.Add 'add a new sheet
     ActiveSheet.name = "10% "   'name it "labels"
     aws.Activate 'reactivate initial active sheet
@@ -128,23 +163,25 @@ For p = 1 To UBound(MyArray)
     'get the last row with data on Destination sheet and offset by one (i.e. next free row)
    'aws.Rows(RandNumber).Copy 'copy the row
    'wsDestination.Rows(LastRowDest).PasteSpecial xlPasteAll 'paste the row
-   MsgBox LastRowOrig
+   'MsgBox LastRowOrig
   
       aws.Rows(RandNumber).Copy 'copy the row
       aws.Rows(RandNumber).Select
-   wsDestination.Rows(LastRowDest).PasteSpecial xlPasteAll
+      wsDestination.Rows(LastRowDest).PasteSpecial xlPasteAll
    
-   Sheets("sample").Select
-   Selection.Delete Shift:=xlUp
- LastRowOrig = LastRowOrig - 1
-   
+     Sheets("sample").Select
+     Selection.Delete Shift:=xlUp
+     LastRowOrig = LastRowOrig - 1
+
    
 Next i
        wsDestination.name = "10% " & napis
          Application.DisplayAlerts = False
                aws.Delete
             Application.DisplayAlerts = True
-
+       wsDestination.Activate
+       Rows("1:1").Select
+    Selection.Delete Shift:=xlUp
     PIWOT.Activate
     
     Else
@@ -166,24 +203,31 @@ Next i
    LastRowDest = wsDestination.Cells(wsDestination.Rows.Count, "A").End(xlUp).Row + 1
     'get the last row with data on Destination sheet and offset by one (i.e. next free row)
    'aws.Rows(RandNumber).Copy 'copy the row
+   'wsDestination.Rows(LastRowDest).PasteSpecial xlPasteAll 'paste the row
+   'MsgBox LastRowOrig
+  
+      aws.Rows(RandNumber).Copy 'copy the row
+      aws.Rows(RandNumber).Select
+      wsDestination.Rows(LastRowDest).PasteSpecial xlPasteAll
    
-aws.Rows(RandNumber).Select
-    Selection.Cut
-   'wsDestination.Paste
-   wsDestination.Rows(LastRowDest).PasteSpecial xlPasteAll 'paste the row
-   Sheets("sample").Select
-   Selection.Delete Shift:=xlUp
+     Sheets("sample").Select
+     Selection.Delete Shift:=xlUp
+     LastRowOrig = LastRowOrig - 1
+     
 
           wsDestination.name = "10% " & napis
          Application.DisplayAlerts = False
                aws.Delete
             Application.DisplayAlerts = True
+                   wsDestination.Activate
+       Rows("1:1").Select
+    Selection.Delete Shift:=xlUp
     PIWOT.Activate
 End If
 End With
 
 message:
-    MsgBox napis
+
 
 Next p
 End Sub
